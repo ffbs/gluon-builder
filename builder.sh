@@ -20,10 +20,15 @@ DEBUG=""
 # (maybe define based on the branch?)
 PRIO=2
 
+# prepare site.conf from template
 rm site/site.conf
 cp site/site.in site/site.conf                                                  
 sed  -i -e "s/AUTOUPDATERBRANCH/$BRANCH/g" site/site.conf
 
+# remove old images to make sure we only upload the new shiny stuff
+rm -rf output/images
+
+# update toolchain to current release
 make update
 
 RELEASENAME=${GLUONVERSION}-$(date '+%Y%m%d')-${BRANCH}
@@ -66,3 +71,9 @@ make manifest GLUON_BRANCH=$BRANCH GLUON_PRIORITY=${PRIO} GLUON_RELEASE=${RELEAS
 # write the current site-commit as into-text
 # ###############
 (cd site/; git show > ../output/images/commit.txt )
+
+# rename files to match the ffbs-naming conventions
+# TODO: give explanation or further resources
+(cd output/images/factory; for f in *; do sudo mv "$f" "${f#gluon-ffbs-}"; done )
+(cd output/images/factory; for f in *raspberry-pi.img.gz; do echo "${f/raspberry-pi.img.gz/raspberry-pi-1.img.gz}"; done )
+(cd output/images/factory; for f in *x86-64*; do echo "${f/x86-64/x86-64-generic}"; done )
