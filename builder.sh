@@ -81,26 +81,34 @@ done
 
 # build manifests
 # ###############
+echo making manifestss
 make manifest GLUON_BRANCH=$BRANCH GLUON_PRIORITY=${PRIO} GLUON_RELEASE=${RELEASENAME}
 
 
 # write the current site-commit as into-text
 # ###############
+echo writing git info into the output directory
 (cd site/; git show > ../output/images/commit.txt )
 
+# rename image dir to represent build
+echo Resolving symlinks...
+cp -Lr output/images "output/${RELEASETAG}"
+rm -rf output/images
+echo ... done
+
 # shorten resulting image names for some TP-Link routers
-(cd output/images/factory; for f in *; do mv "$f" "${f#gluon-ffbs-}"; done )
+echo Shortening filenames
+(cd output/${RELEASETAG}/factory; for f in *; do mv "$f" "${f#gluon-ffbs-}"; done )
 
 # rename files to match the ffbs-naming conventions
 # TODO: give explanation or further resources
-(cd output/images/factory; for f in *raspberry-pi.img.gz; do mv "$f" "${f/raspberry-pi.img.gz/raspberry-pi-1.img.gz}"; done )
+echo Renaming files for consistent naming scheme
+(cd output/${RELEASETAG}/factory; for f in *raspberry-pi.img.gz; do mv "$f" "${f/raspberry-pi.img.gz/raspberry-pi-1.img.gz}"; done )
 
-(cd output/images/factory; for f in *x86-64.vmdk; do mv "$f" "${f/.vmdk/-vmware.vmdk}"; done )
-(cd output/images/factory; for f in *x86-64.vdi; do mv "$f" "${f/.vdi/-virtualbox.vdi}"; done )
-(cd output/images/factory; for f in *x86-64.img.gz; do mv "$f" "${f/.img.gz/-generic.img.gz}"; done )
+(cd output/${RELEASETAG}/factory; for f in *x86-64.vmdk; do mv "$f" "${f/.vmdk/-vmware.vmdk}"; done )
+(cd output/${RELEASETAG}/factory; for f in *x86-64.vdi; do mv "$f" "${f/.vdi/-virtualbox.vdi}"; done )
+(cd output/${RELEASETAG}/factory; for f in *x86-64.img.gz; do mv "$f" "${f/.img.gz/-generic.img.gz}"; done )
 
-(cd output/images/factory; for f in *x86-generic.vmdk; do mv "$f" "${f/x86-generic/x86-vmware}"; done )
-(cd output/images/factory; for f in *x86-generic.vdi; do mv "$f" "${f/x86-generic/x86-virtualbox}"; done )
+(cd output/${RELEASETAG}/factory; for f in *x86-generic.vmdk; do mv "$f" "${f/x86-generic/x86-vmware}"; done )
+(cd output/${RELEASETAG}/factory; for f in *x86-generic.vdi; do mv "$f" "${f/x86-generic/x86-virtualbox}"; done )
 
-# rename image dir to represent build
-mv output/images "output/${RELEASETAG}"
