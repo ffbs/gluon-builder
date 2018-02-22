@@ -6,12 +6,12 @@ cd ../
 
 # Setting environment
 # ###################
-ARCHITECTURES=( ar71xx-tiny ar71xx-generic ar71xx-nand brcm2708-bcm2708 brcm2708-bcm2709 mpc85xx-generic x86-64 x86-generic)
+ARCHITECTURES=( ar71xx-tiny ar71xx-generic ar71xx-nand brcm2708-bcm2708 brcm2708-bcm2709 mpc85xx-generic x86-64 x86-generic ramips-mt7621)
 #ARCHITECTURES=( ar71xx-tiny )
 #BRANCH=stable
 #BRANCH=unbranded_stable
-BRANCH=experimental
-#BRANCH=beta
+#BRANCH=experimental
+BRANCH=beta
 
 # prepare needed strings
 GLUONVERSION=$(git describe --tags | cut -d "-" -f 1)
