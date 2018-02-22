@@ -34,7 +34,9 @@ DEBUG=""
 PRIO=2
 
 # prepare site.conf from template
-rm site/site.conf
+if [ -f site/site.conf ]; then
+  rm site/site.conf
+fi
 cp site/site.in site/site.conf
 sed  -i -e "s/AUTOUPDATERBRANCH/$BRANCH/g" site/site.conf
 
